@@ -1,0 +1,31 @@
+version: "2"
+services:
+  db:
+    image: mariadb
+    volumes:
+    - ./wp-database:/var/lib/mysql
+    ports:
+      - "8081:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: pushdigital
+  wordpress:
+    image: wordpress
+    restart: always
+    volumes:
+      - ./:/var/www/html
+    ports:
+      - "8080:80"
+    links:
+      - db:mysql
+    environment:
+      WORDPRESS_DB_PASSWORD: pushdigital
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: pushdigital
+    depends_on: 
+      - db
+    ports:
+    - 8181:80
